@@ -1,0 +1,150 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li>
+        <i class="icon-home home-icon"></i>
+        <a href="/admin/dashboard">Home</a>
+        </li>
+
+        <li>
+        <a href="/admin/permission/operation" class="active">Operation List</a>
+        </li>
+    </ul><!-- .breadcrumb -->
+
+    <div class="nav-search" id="nav-search">
+        <form class="form-search">
+            <span class="input-icon">
+                <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                <i class="icon-search nav-search-icon"></i>
+            </span>
+        </form>
+    </div><!-- #nav-search -->
+</div>
+
+<div class="page-content">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="header smaller lighter blue">
+               Operation List
+            </h3>
+            <div class="table-header">
+                Showing <?=$pager->offset_start?> to <?=$pager->offset_end?> of <?=$pager->total_items?> items 
+            </div>
+
+            <div class="table-responsive dataTables_wrapper">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <?=$form->render('q', array(
+                                    'placeholder' => 'Keyword',
+                                    'class' => 'form-control input-sm'
+                                ))?>
+                            </div>
+                            <div class="form-group">
+                                <?=$form->render('group', array(
+                                    'class' => 'form-control input-sm'
+                                ))?>
+                            </div>
+                            <div class="form-group">
+                                <?=$form->render('roleid', array(
+                                    'class' => 'form-control input-sm'
+                                ))?>
+                            </div>
+                            <button class="btn btn-info btn-sm form-control" type="submit">
+                                <i class="icon-search bigger-110"></i>
+                                Filter 
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+                <table class="table table-striped table-bordered table-hover dataTable  table-sortable" id="post-grid" data-sortable-key="order" data-sortable-default="-created_at">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <label>
+                                    <input type="checkbox" class="ace">
+                                    <span class="lbl"></span>
+                                </label>
+                            </th>
+                            <th class="hidden-480">
+                                ID
+                            </th>
+                            <th>Resource Name</th>
+                            <th>Name</th>
+                            <th>Resource Detail</th>
+                            <th class="hidden-480">Description</th>
+                            <th>Roles</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <?foreach($pager->items as $item):?>
+                        <tr>
+                            <td class="center">
+                                <label>
+                                    <input type="checkbox" class="ace" value="<?=$item->id?>"  data-batch-source="<?=$item->id?>">
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+                            <td><?=$item->id?></td>
+                            <td><a href="/admin/permission/operation?q=<?=$this->escaper->escapeHtmlAttr(addslashes($item->resourceKey))?>"><?=$item->resource->name?></a></td>
+                            <td>
+                                <?=$item->name?>
+                                <span class="label label-success"><?=$item->operationKey?></span>
+                            </td>
+                            <td>
+                                <span class="label"><?=$item->resource->resourceGroup?></span>
+                                <span class="label label-info"><?=$item->resourceKey?></span>
+                            </td>
+                            <td><?=$item->description?></td>
+                            <td>
+                                <?if($item->roles):?>
+                                <?foreach($item->roles as $role):?>
+                                <button class="btn btn-xs btn-warning ajax-form-sumbit" data-ajax-form="1" date-method="delete" data-form-action="/admin/permission/process/role/<?=$role->id?>/operation/<?=$item->id?>" data-callback="form.remove();">
+                                    <?=$role->name?> <?=$role->roleKey?> <i class="icon-remove bigger-120"></i> 
+                                </button>
+                                <?endforeach?>
+                                <?endif?>
+                            </td>
+                        </tr>
+                        <?endforeach?>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        Add To:
+                        <div class="btn-group">
+                            <?if($roles):?>
+                            <?foreach($roles as $role):?>
+                            <button class="btn btn-xs btn-success ajax-form-sumbit" data-batch-form="1" data-source-name="id" data-source-selectors="#post-grid input[data-batch-source]" date-method="put" data-form-action="/admin/permission/process/applyoperations" data-callback="window.location.reload();">
+
+                                <input type="hidden" data-name="roleid" value="<?=$role->id?>" >
+                                <?=$role->roleKey?> <?=$role->name?>
+                            </button>
+                            <?endforeach?>
+                            <?endif?>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="dataTables_paginate">
+                            <?$this->partial("partial/paginator", array(
+                                'pagerUrl' => '/admin/permission/resource',
+                                'pager' => $pager,
+                            ))?>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!--/table div-->
+
+        </div><!-- /col-->
+    </div><!--row end-->
+
+</div><!-- /.page-content -->

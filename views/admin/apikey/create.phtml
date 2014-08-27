@@ -1,0 +1,168 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li>
+        <i class="icon-home home-icon"></i>
+        <a href="/admin/dashboard">Home</a>
+        </li>
+
+        <li>
+        <a href="/admin/permission/apikey">API Key</a>
+        </li>
+        <li class="active">
+        <a href="/admin/permission/apikey/create">Generate API Key</a>
+        </li>
+    </ul><!-- .breadcrumb -->
+
+    <div class="nav-search" id="nav-search">
+        <!--
+        <form class="form-search">
+            <span class="input-icon">
+                <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                <i class="icon-search nav-search-icon"></i>
+            </span>
+        </form>
+        -->
+    </div><!-- #nav-search -->
+</div>
+
+<form  action="" class="form-horizontal" method="POST" enctype="multipart/form-data" novalidate="novalidate">
+    <div class="page-content">
+        <div class="page-header">
+            <?if(empty($item->id)):?>
+            <h1>Generate API Key</h1>
+            <?else:?>
+            <h1>Change Plan</h1>
+            <?endif?>
+        </div><!-- /.page-header -->
+
+        <div class="row">
+            <div class="col-xs-9">
+                <!-- PAGE CONTENT BEGINS -->
+
+                <div class="form-group">
+                    <?=$form->render('id', array())?>
+                    <label for="apikey" class="col-sm-3 control-label no-padding-right">Key</label>
+                    <div class="col-sm-9">
+                        <?=$form->render('apikey', array(
+                            'class' => 'col-xs-12 col-sm-6',
+                            'readonly' => 'readonly',
+                            'placeholder' => 'Will be generated automatic',
+                        ))?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="plan" class="col-sm-3 control-label no-padding-right">Key Level</label>
+                    <div class="col-sm-9">
+                        <?=$form->render('level', array(
+                            'required' => 'required',
+                        ))?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="minutely-rate" class="col-sm-3 control-label no-padding-right">Minutely Rate</label>
+                    <div class="col-sm-9">
+                        <?=$form->render('minutelyRate', array(
+                            'required' => 'required',
+                        ))?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hourly-rate" class="col-sm-3 control-label no-padding-right">Hourly Rate</label>
+                    <div class="col-sm-9">
+                        <?=$form->render('hourlyRate', array(
+                            'required' => 'required',
+                        ))?>
+                    </div>
+                </div>
+               <div class="form-group">
+                    <label for="daily-rate" class="col-sm-3 control-label no-padding-right">Daily Rate</label>
+                    <div class="col-sm-9">
+                        <?=$form->render('dailyRate', array(
+                            'required' => 'required',
+                        ))?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="user" class="col-sm-3 control-label no-padding-right">User</label>
+                    <div class="col-sm-9">
+                        <?=$form->render('userId', array(
+                            'value' => empty($item->id) ? (empty($user->id) ? '' : $user->id)  : $item->id
+                        ))?>
+                        <?=$form->render('username', array(
+                            'class' => 'form-control autocomplete',
+                            'data-autocomplete-source' => '/admin/user/process/suggestions?query=%QUERY',
+                            'data-autocomplete-target' => 'input[name=userId]',
+                            'data-autocomplete-fill-name' => 'id',
+                            'data-autocomplete-display-key' => 'username',
+                            'data-autocomplete-clear-fill-when-nomatch' => '1',
+                            'placeholder' => 'Enter User name',
+                            'value' => empty($item->id) ? (empty($user->id) ? '' : $user->username) : $item->user->username
+                            //'required' => 'required', //this will cause form not able to submit
+                        ))?>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="expired-at" class="col-sm-3 control-label no-padding-right">Expired At</label>
+                    <div class="col-sm-9">
+                        <input name="day" type="text" data-date-format="yyyy-mm-dd" class=" date-picker" placeholder="Pick A Day" value="<?=empty($item->expiredAt) ? '' : $this->tag->datetime($item->expiredAt, 'Y-m-d')?>">
+                        <input name="time" type="text" class="time-picker" placeholder="Pick Time" value="<?=empty($item->expiredAt) ? '' : $this->tag->datetime($item->expiredAt, 'H:i:s')?>">
+                        <?=$form->render('expiredAt', array())?>
+                    </div>
+                </div>
+
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" class="btn btn-info">
+                            <i class="icon-ok bigger-110"></i>
+                            Submit
+                        </button>
+                        <button type="reset" class="btn">
+                            <i class="icon-undo bigger-110"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+
+
+            </div><!-- /.col -->
+            <div class="col-xs-3">
+
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.page-content -->
+</form>
+
+<script>
+    $(document).ready(function(){
+            var updateCreateTime = function(){
+                    var day = $('input[name=day]').val();
+                    var time = $('input[name=time]').val();
+                    time = time.length == 7 ? '0' + time : time;
+                    var timestamp = moment(day + ' ' + time).format('X');
+                    $('input[name=expiredAt]').val(timestamp);
+            }
+            $('input[name=day], input[name=time]').on('change', updateCreateTime);
+
+            var plans = <?=json_encode($this->config->permission->keyLevels->toArray())?>;
+            var setPlan = function(level) {
+                level = level || $('select[name=level]').val();
+                if(!plans[level]) {
+                        return;
+                }
+                var plan = plans[level];
+                for(var i in plan) {
+                        $('input[name="' + i + '"]').val(plan[i]);
+                }
+            }
+            $('select[name=level]').on('change', function(){
+                setPlan();
+            });
+            setPlan()
+    });
+</script>

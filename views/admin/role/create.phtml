@@ -1,0 +1,108 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+    </script>
+
+    <ul class="breadcrumb">
+        <li>
+        <i class="icon-home home-icon"></i>
+        <a href="/admin/dashboard">Home</a>
+        </li>
+
+        <li>
+        <a href="/admin/permission/role">Role</a>
+        </li>
+        <li class="active">
+        <a href="/admin/permission/role/create">Create New Role</a>
+        </li>
+    </ul><!-- .breadcrumb -->
+
+    <div class="nav-search" id="nav-search">
+        <!--
+        <form class="form-search">
+            <span class="input-icon">
+                <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                <i class="icon-search nav-search-icon"></i>
+            </span>
+        </form>
+        -->
+    </div><!-- #nav-search -->
+</div>
+
+<form id="" action="" method="POST" enctype="multipart/form-data" novalidate="novalidate">
+    <div class="page-content">
+        <div class="page-header">
+            <?if(empty($item->id)):?>
+            <h1>Create New Role</h1>
+            <?else:?>
+            <h1>Edit Role</h1>
+            <?endif?>
+        </div><!-- /.page-header -->
+
+        <div class="row">
+            <div class="col-xs-9">
+                <!-- PAGE CONTENT BEGINS -->
+
+                <div class="form-group">
+                    <?=$form->render('id', array())?>
+                    <label class="block clearfix">
+                        <?=$form->render('roleKey', array(
+                            'class' => 'form-control input-lg',
+                            'placeholder' => 'Role Key',
+                            'required' => 'required',
+                            'data-parsley-pattern' => "[A-Z_]+",
+                            'data-parsley-pattern-message' => "Uppercase letters and underlined Only",
+                        ))?>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="block clearfix">
+                        <?=$form->render('name', array(
+                            'class' => 'form-control input-lg',
+                            'placeholder' => 'Role Name',
+                            'required' => 'required',
+                        ))?>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="block clearfix">
+                            <?=$form->render('description', array(
+                                'class' => 'form-control',
+                                'rows' => 4,
+                            ))?>
+                    </label>
+                </div>
+            </div><!-- /.col -->
+            <div class="col-xs-3">
+
+                <div class="widget-box">
+                    <div class="widget-header widget-header-small">
+                        <h4>Publish</h4>
+                        <span class="widget-toolbar">
+                            <a data-action="collapse" href="#">
+                                <i class="icon-chevron-up"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div class="widget-body">
+                        <div class="clearfix form-actions no-margin">
+                            <input type="hidden" name="__redirect" value="" />
+                            <button type="submit" class="btn btn-info">
+                                <i class="icon-save"></i>
+                                Save
+                            </button>
+                            <button type="submit" class="btn btn-info" data-redirect-url="/admin/permission/role/create">
+                                <i class="icon-ok"></i>
+                                Save &amp; Add Another
+                            </button>
+                        </div>
+                    </div>
+                </div><!--widgex box-->
+
+
+
+            </div><!-- /.col -->
+
+        </div><!-- /.row -->
+    </div><!-- /.page-content -->
+</form>

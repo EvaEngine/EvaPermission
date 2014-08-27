@@ -1,0 +1,15 @@
+<phpunit bootstrap="./tests/Bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="EvaEngine Test Suite">
+            <directory>./tests/EvaEngineTest</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>src/</directory>
+            <exclude>
+                <directory>vendor/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

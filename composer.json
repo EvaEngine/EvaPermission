@@ -1,0 +1,20 @@
+{
+    "name": "allovince/evapermission",
+    "description": "Standard Permission Module of EvaEngine",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+        "name": "AlloVince",
+        "email": "allo.vince@gmail.com",
+        "homepage": "http://avnpc.com"
+    }
+    ],
+    "require": {
+	"allovince/evauser" : "dev-master"
+    },
+    "autoload": {
+	"classmap" : ["Module.php"],
+        "psr-4": {"Eva\\EvaPermission\\": "src/EvaPermission"}
+    }
+}
