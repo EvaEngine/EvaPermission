@@ -42,7 +42,7 @@ class Apikey extends Entities\Apikeys
 
     public function generateToken($userId)
     {
-        $plan = $this->getDI()->getConfig->permission->keyLevels->basic;
+        $plan = $this->getDI()->getConfig()->permission->keyLevels->basic;
         $apikey = new Apikey();
         $apikey->userId = $userId;
         $apikey->level = 'basic';
