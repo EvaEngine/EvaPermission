@@ -4,6 +4,7 @@ namespace Eva\EvaPermission\Models;
 
 use Eva\EvaPermission\Entities;
 use Eva\EvaEngine\Exception;
+use Eva\EvaUser\Models\Login;
 
 class Apikey extends Entities\Apikeys
 {
@@ -160,5 +161,23 @@ class Apikey extends Entities\Apikeys
 
         $fastCache->incr($cacheKey);
         return false;
+    }
+
+    public function loginByApikey($apikey)
+    {
+        Login::setLoginMode(Login::LOGIN_MODE_TOKEN);
+        $token = Apikey::findFirst(array(
+            'conditions' => 'apikey = :apikey:',
+            'bind' => array(
+                'apikey' => $apikey,
+            )
+        ));
+        if (!$token) {
+            throw new Exception\UnauthorizedException('ERR_PERMISSION_APIKEY_NOT_EXIST');
+        }
+        $userId = $token->userId;
+        $login = new Login();
+        $login->id = $userId;
+        $login->login();
     }
 }
