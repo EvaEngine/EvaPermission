@@ -8,6 +8,7 @@ use Eva\EvaEngine\Mvc\Controller\TokenAuthorityControllerInterface;
 use Eva\EvaEngine\Mvc\Controller\RateLimitControllerInterface;
 use Eva\EvaPermission\Entities;
 use Eva\EvaPermission\Auth;
+use Eva\EvaEngine\Service\TokenStorage;
 
 class DispatchListener
 {
@@ -42,7 +43,7 @@ class DispatchListener
             $dispatcher->getDI()->getResponse()->setHeader('X-Permission-Auth', 'Allow-By-Session');
         } elseif ($controller instanceof TokenAuthorityControllerInterface) {
             $auth = new Auth\TokenAuthority();
-            $auth->setApikey($dispatcher->getDI()->getRequest()->get('api_key'));
+            $auth->setApikey(TokenStorage::dicoverToken($dispatcher->getDI()->getRequest()));
             $auth->setCache($dispatcher->getDI()->getGlobalCache());
             //$auth->setFastCache($dispatcher->getDI()->getFastCache());
             if (!$auth->checkAuth(get_class($controller), $dispatcher->getActionName())) {
