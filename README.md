@@ -157,14 +157,11 @@ Token的获取通过`Eva\EvaEngine\Service\TokenStorage`，User模块也会基�
     curl -H "Authorization: token XXXX" http://api.wallstreetcn.com/v2/posts/stars
     http http://api.wallstreetcn.com/v2/posts/stars "Authorization: token XXXX"
 
+### 新增一个带权限资源的流程
 
-
-
-
-
-
-
-
-
+1. 编写Controller，实现`SessionAuthorityControllerInterface`或`TokenAuthorityControllerInterface`接口
+2. 对Controller按照规范编写注解
+3. 运行`aclscanner`脚本，将资源及操作添加到数据库
+4. 在后台给有权限的角色分配资源
 
 
