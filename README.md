@@ -137,7 +137,7 @@ if (!$auth->checkAuth('Wscn\Controllers\MineController', 'index')) {
 
 ### 权限检测与系统整合
 
-权限检测通过`dispatch:beforeExecuteRoute`事件与整个系统整合
+权限检测通过`dispatch:beforeExecuteRoute`事件与整个系统整合，代码位置在`Eva\EvaPermission\Events\DispatchListener`。
 
 
 ### Token设计（暂定）
@@ -163,3 +163,9 @@ Token的获取通过`Eva\EvaEngine\Service\TokenStorage`，User模块也会基�
 2. 对Controller按照规范编写注解
 3. 运行`aclscanner`脚本，将资源及操作添加到数据库
 4. 在后台给有权限的角色分配资源
+
+### 缓存设计
+
+### 访问次数限制设计
+
+

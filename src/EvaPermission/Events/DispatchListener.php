@@ -43,12 +43,23 @@ class DispatchListener
             $dispatcher->getDI()->getResponse()->setHeader('X-Permission-Auth', 'Allow-By-Session');
         } elseif ($controller instanceof TokenAuthorityControllerInterface) {
             $auth = new Auth\TokenAuthority();
-            $auth->setApikey(TokenStorage::dicoverToken($dispatcher->getDI()->getRequest()));
+            $apikey = TokenStorage::dicoverToken($dispatcher->getDI()->getRequest());
+            if (!$apikey) {
+                throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_INPUT');
+            }
+            $auth->setApikey($apikey);
             $auth->setCache($dispatcher->getDI()->getGlobalCache());
-            //$auth->setFastCache($dispatcher->getDI()->getFastCache());
             if (!$auth->checkAuth(get_class($controller), $dispatcher->getActionName())) {
                 $dispatcher->getDI()->getResponse()->setHeader('X-Permission-Auth', 'Deny-By-Token');
-                throw new Exception\UnauthorizedException('Permission not allowed');
+                $denyReason = $auth->getDenyReason();
+                switch ($denyReason) {
+                    case Auth\TokenAuthority::DENY_REASON_BY_NON_TOKEN:
+                    throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_INPUT');
+                    case Auth\TokenAuthority::DENY_REASON_BY_TOKEN_NOT_MATCH:
+                    throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_MATCH');
+                    default:
+                    throw new Exception\UnauthorizedException('ERR_AUTH_PERMISSION_NOT_ALLOW');
+                }
             }
             if ($controller instanceof RateLimitControllerInterface && !$auth->checkLimitRate()) {
                 $dispatcher->getDI()->getResponse()->setHeader('X-Permission-Auth', 'Deny-By-Token');

@@ -14,6 +14,17 @@ class TokenAuthority extends AbstractAuthority
 
     protected $token;
 
+    protected $denyReason;
+
+    const DENY_REASON_BY_NON_TOKEN = 'non-token';
+    const DENY_REASON_BY_TOKEN_NOT_MATCH = 'not-match';
+    const DENY_REASON_BY_NOT_ALLOW = 'not-allow';
+
+    public function getDenyReason()
+    {
+        return $this->denyReason;
+    }
+
     public function setApikey($apikey)
     {
         $this->apikey = $apikey;
@@ -39,14 +50,17 @@ class TokenAuthority extends AbstractAuthority
     {
         $token = $this->getToken();
         if (!$token) {
+            $this->denyReason = self::DENY_REASON_BY_NON_TOKEN;
             return false;
         }
 
         if ($token->isSuperToken()) {
             return true;
         }
+
         $tokenStatus = $token->getTokenStatus();
-        if (empty($tokenStatus['roles'])) {
+        if (!$tokenStatus || empty($tokenStatus['roles'])) {
+            $this->denyReason = self::DENY_REASON_BY_TOKEN_NOT_MATCH;
             return false;
         }
 
@@ -58,6 +72,7 @@ class TokenAuthority extends AbstractAuthority
                 return true;
             }
         }
+        $this->denyReason = self::DENY_REASON_BY_NOT_ALLOW;
         return false;
     }
 
