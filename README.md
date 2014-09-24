@@ -109,7 +109,7 @@ class MineController extends ControllerBase implements SessionAuthorityControlle
 
 Session示例代码，`checkAuth`方法中接受资源名（即Controller类全名）及操作名（即Action名），`setCache`方法接受`Phalcon\Cache\Backend`类型。
 
-```
+``` php
 use Eva\EvaPermission\Auth;
 $auth = new Auth\SessionAuthority();
 $auth->setCache($di->getGlobalCache());
@@ -122,7 +122,7 @@ if (!$auth->checkAuth('Wscn\Controllers\MineController', 'index')) {
 
 Token示例代码：
 
-```
+``` php
 use Eva\EvaPermission\Auth;
 use Eva\EvaEngine\Service\TokenStorage;
 $auth = new Auth\TokenAuthority();
@@ -163,5 +163,3 @@ Token的获取通过`Eva\EvaEngine\Service\TokenStorage`，User模块也会基�
 2. 对Controller按照规范编写注解
 3. 运行`aclscanner`脚本，将资源及操作添加到数据库
 4. 在后台给有权限的角色分配资源
-
-
