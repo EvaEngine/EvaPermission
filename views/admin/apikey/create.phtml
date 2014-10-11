@@ -139,6 +139,13 @@
 </form>
 
 <script>
+(function(root, factory){
+    if (typeof define === 'function' && define.amd) {
+        require(["moment", "jquery"], factory);
+    } else {
+        factory(root.moment, root.jQuery);
+    }
+})(this, function(moment, $){
     $(document).ready(function(){
             var updateCreateTime = function(){
                     var day = $('input[name=day]').val();
@@ -165,4 +172,5 @@
             });
             setPlan()
     });
+});
 </script>
