@@ -50,7 +50,7 @@ abstract class AbstractAuthority
         }
 
         if ($cache) {
-            $cache->save('acl', $acl);
+            $cache->save('acl', $acl, 600);
         }
         return $this->acl = $acl;
     }
