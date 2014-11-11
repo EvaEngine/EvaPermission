@@ -173,7 +173,7 @@ class Apikey extends Entities\Apikeys
             )
         ));
         if (!$token) {
-            throw new Exception\UnauthorizedException('ERR_PERMISSION_APIKEY_NOT_EXIST');
+            throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_MATCH');
         }
         $userId = $token->userId;
         $login = new Login();
