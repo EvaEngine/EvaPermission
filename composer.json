@@ -1,5 +1,5 @@
 {
-    "name": "allovince/evapermission",
+    "name": "evaengine/eva-permission",
     "description": "Standard Permission Module of EvaEngine",
     "license": "BSD-3-Clause",
     "minimum-stability": "dev",
