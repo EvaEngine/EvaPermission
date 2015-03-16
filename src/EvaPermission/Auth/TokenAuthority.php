@@ -67,6 +67,7 @@ class TokenAuthority extends AbstractAuthority
         $roles = $tokenStatus['roles'];
         $acl = $this->getAcl();
         foreach ($roles as $role) {
+            $operation = strtolower($operation);
             //If any of roles allowed permission
             if ($acl->isAllowed($role, $resource, $operation)) {
                 return true;
