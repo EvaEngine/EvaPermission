@@ -62,6 +62,7 @@ class Scanner
 
         $operationModels = array();
         foreach ($operations as $operation) {
+            $operation['operationKey'] = strtolower($operation['operationKey']);
             $operationModel = Entities\Operations::findFirst(array(
                 "conditions" => "resourceKey = :resourceKey: AND operationKey = :operationKey:",
                 "bind"       => array(
