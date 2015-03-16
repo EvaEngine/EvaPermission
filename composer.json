@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "evaengine/evauser": "dev-master"
+        "evaengine/eva-user": "dev-master"
     },
     "autoload": {
         "classmap": ["Module.php"],
