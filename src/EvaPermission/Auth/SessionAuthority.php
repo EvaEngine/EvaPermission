@@ -38,8 +38,10 @@ class SessionAuthority extends AbstractAuthority
 
         $roles = $user->getRoles();
         $acl = $this->getAcl();
+
         foreach ($roles as $role) {
             //If any of roles allowed permission
+            $operation = strtolower($operation);
             if ($acl->isAllowed($role, $resource, $operation)) {
                 return true;
             }
