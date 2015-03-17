@@ -34,6 +34,11 @@
         API Keys
     </a>
     </li>
-
+    <li class="tobe-highlight" data-highlight-url="/admin/permission/process/flushCache">
+        <a href="/admin/permission/process/flushCache">
+            <i class="icon-double-angle-right"></i>
+            Flush Cache
+        </a>
+    </li>
 </ul>
 </li>

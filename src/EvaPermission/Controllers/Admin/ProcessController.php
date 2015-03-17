@@ -2,6 +2,7 @@
 
 namespace Eva\EvaPermission\Controllers\Admin;
 
+use Eva\EvaPermission\Auth\SessionAuthority;
 use Eva\EvaPermission\Models;
 use Eva\EvaPermission\Entities;
 use Eva\EvaEngine\Mvc\Controller\JsonControllerInterface;
@@ -176,5 +177,16 @@ class ProcessController extends ControllerBase implements JsonControllerInterfac
         }
 
         return $this->response->setJsonContent($res);
+    }
+    /**
+     * @operationName("Flush ACL cache")
+     * @operationDescription("Flush ACL cache")
+     */
+    public function flushCacheAction()
+    {
+        $authority = new SessionAuthority();
+        $authority->getAcl(true);
+        $this->flashSession->success('SUCCESS_FLUSH_ACL_CACHE');
+        return $this->response->redirect('/admin/dashboard');
     }
 }

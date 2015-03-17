@@ -17,14 +17,18 @@ abstract class AbstractAuthority
 
     protected $cache;
 
-    public function getAcl()
+    /**
+     * @param bool $noCache 是否穿透缓存
+     * @return MemoryAcl
+     */
+    public function getAcl($noCache = false)
     {
         if ($this->acl) {
             return $this->acl;
         }
 
         $cache = $this->getCache();
-        if ($cache && $data = $cache->get('acl')) {
+        if (!$noCache && $cache && $data = $cache->get('acl')) {
             return $this->acl = $data;
         }
 
