@@ -26,17 +26,39 @@ class DispatchListener
             $auth = new Auth\SessionAuthority();
             $auth->setCache($dispatcher->getDI()->getGlobalCache());
             if (!$auth->checkAuth(get_class($controller), $dispatcher->getActionName())) {
-                $dispatcher->setModuleName('EvaPermission');
-                $dispatcher->setNamespaceName('Eva\EvaPermission\Controllers');
-                $dispatcher->setControllerName('Error');
-                $dispatcher->setActionName('index');
-                $dispatcher->forward(array(
-                    "controller" => "error",
-                    "action" => "index",
-                    "params" => array(
-                        'activeController' => $controller,
-                    )
-                ));
+                try {
+                    $errorHandlerConfig = $dispatcher->getDI()->get('evaPermissionErrorHandlerConfig');
+                } catch (\Exception $e) {
+                    $errorHandlerConfig = [];
+                }
+                if (!$errorHandlerConfig) {
+                    $errorHandlerConfig = [
+                        'module' => 'EvaPermission',
+                        'namespace' => 'Eva\EvaPermission\Controllers',
+                        'forward' => array(
+                            "controller" => "error",
+                            "action" => "index",
+                        )
+                    ];
+                }
+
+                $errorHandlerConfig['forward']['params'] = array(
+                    'activeController' => $controller,
+                );
+                $dispatcher->setModuleName($errorHandlerConfig['module']);
+                $dispatcher->setNamespaceName($errorHandlerConfig['namespace']);
+                $dispatcher->forward($errorHandlerConfig['forward']);
+//                $dispatcher->setModuleName('EvaPermission');
+//                $dispatcher->setNamespaceName('Eva\EvaPermission\Controllers');
+//                $dispatcher->setControllerName('Error');
+//                $dispatcher->setActionName('index');
+//                $dispatcher->forward(array(
+//                    "controller" => "error",
+//                    "action" => "index",
+//                    "params" => array(
+//                        'activeController' => $controller,
+//                    )
+//                ));
                 $dispatcher->getDI()->getResponse()->setHeader('X-Permission-Auth', 'Deny-By-Session');
                 return false;
             }
@@ -54,11 +76,11 @@ class DispatchListener
                 $denyReason = $auth->getDenyReason();
                 switch ($denyReason) {
                     case Auth\TokenAuthority::DENY_REASON_BY_NON_TOKEN:
-                    throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_INPUT');
+                        throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_INPUT');
                     case Auth\TokenAuthority::DENY_REASON_BY_TOKEN_NOT_MATCH:
-                    throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_MATCH');
+                        throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_MATCH');
                     default:
-                    throw new Exception\UnauthorizedException('ERR_AUTH_PERMISSION_NOT_ALLOW');
+                        throw new Exception\UnauthorizedException('ERR_AUTH_PERMISSION_NOT_ALLOW');
                 }
             }
             if ($controller instanceof RateLimitControllerInterface && !$auth->checkLimitRate()) {
