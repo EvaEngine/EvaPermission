@@ -2,7 +2,9 @@
 
 namespace Eva\EvaPermission\Entities;
 
-class UsersRoles extends \Eva\EvaEngine\Mvc\Model
+use Eva\EvaUser\Entities\EvaUserEntityBase;
+
+class UsersRoles extends EvaUserEntityBase
 {
     protected $tableName = 'permission_users_roles';
 

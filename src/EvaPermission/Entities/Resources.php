@@ -2,7 +2,9 @@
 
 namespace Eva\EvaPermission\Entities;
 
-class Resources extends \Eva\EvaEngine\Mvc\Model
+use Eva\EvaUser\Entities\EvaUserEntityBase;
+
+class Resources extends EvaUserEntityBase
 {
     protected $tableName = 'permission_resources';
 
