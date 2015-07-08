@@ -21,8 +21,10 @@ class DispatchListener
         }
         $controller = $dispatcher->getActiveController();
 
+        $isOptions = $controller->request->isOptions();
+
         //Not need to authority
-        if ($controller instanceof SessionAuthorityControllerInterface) {
+        if (($controller instanceof SessionAuthorityControllerInterface) && (!$isOptions)) {
             $auth = new Auth\SessionAuthority();
             $auth->setCache($dispatcher->getDI()->getGlobalCache());
             if (!$auth->checkAuth(get_class($controller), $dispatcher->getActionName())) {
