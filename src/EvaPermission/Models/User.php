@@ -25,7 +25,7 @@ class User extends Login
         }
         $storage = Login::getAuthStorage();
         $authRoles = $storage->get(Login::AUTH_KEY_ROLES);
-        $authRoles = $authRoles ?: array();
+        $authRoles = is_array($authRoles) ? $authRoles : array();
         //Add default roles
         if ($user['status'] == 'active') {
             $authRoles[] = 'USER';
