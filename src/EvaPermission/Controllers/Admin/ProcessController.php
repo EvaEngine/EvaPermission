@@ -186,6 +186,7 @@ class ProcessController extends ControllerBase implements JsonControllerInterfac
     {
         $authority = new SessionAuthority();
         $authority->getAcl(true);
+        $authority->setCache($this->getDI()->getGlobalCache());
         $this->flashSession->success('SUCCESS_FLUSH_ACL_CACHE');
         return $this->response->redirect('/admin/dashboard');
     }
