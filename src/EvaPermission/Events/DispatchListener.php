@@ -67,7 +67,7 @@ class DispatchListener
             $dispatcher->getDI()->getResponse()->setHeader('X-Permission-Auth', 'Allow-By-Session');
         } elseif ($controller instanceof TokenAuthorityControllerInterface) {
             $auth = new Auth\TokenAuthority();
-            $apikey = TokenStorage::dicoverToken($dispatcher->getDI()->getRequest());
+            $apikey = TokenStorage::discoverToken($dispatcher->getDI()->getRequest());
             if (!$apikey) {
                 throw new Exception\UnauthorizedException('ERR_AUTH_TOKEN_NOT_INPUT');
             }
