@@ -3,6 +3,7 @@
 namespace Eva\EvaPermission\Controllers;
 
 use Eva\EvaEngine\Mvc\Controller\ControllerBase;
+use Eva\EvaUser\Models\Login;
 
 class ErrorController extends ControllerBase
 {
