@@ -10,8 +10,8 @@ class ErrorController extends ControllerBase
     public function indexAction()
     {
         $login = new Login();
-        $login->logout();
         if (!$login->isUserLoggedIn()) {
+            $login->logout();
             return $this->response->redirect(eva_url('passport', '/login', [
                 'next' => $this->currentUrl()
             ]));
