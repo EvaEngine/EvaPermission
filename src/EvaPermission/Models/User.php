@@ -25,7 +25,8 @@ class User extends Login
             return array('GUEST');
         }
         $storage = Login::getAuthStorage();
-        $authRoles = $storage->get(Login::AUTH_KEY_ROLES);
+        $authRoles = $user['roles'];
+        //$storage->get(Login::AUTH_KEY_ROLES);
         $authRoles = is_object($authRoles) ? (array)$authRoles : $authRoles;
         $authRoles = is_array($authRoles) ? $authRoles : array();
         //Add default roles
