@@ -11,9 +11,11 @@ class ErrorController extends ControllerBase
     {
         $login = new Login();
         $login->logout();
-        return $this->response->redirect(eva_url('passport', '/login', [
-            'next' => $this->currentUrl()
-        ]));
+        if (!$login->isUserLoggedIn()) {
+            return $this->response->redirect(eva_url('passport', '/login', [
+                'next' => $this->currentUrl()
+            ]));
+        }
         $content = <<<EOF
 <!doctype html>
 <html lang="en">
