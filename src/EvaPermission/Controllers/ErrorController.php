@@ -8,6 +8,11 @@ class ErrorController extends ControllerBase
 {
     public function indexAction()
     {
+        $login = new Login();
+        $login->logout();
+        return $this->response->redirect(eva_url('passport', '/login', [
+            'next' => $this->currentUrl()
+        ]));
         $content = <<<EOF
 <!doctype html>
 <html lang="en">
