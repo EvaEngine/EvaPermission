@@ -14,6 +14,7 @@ class User extends Login
             return false;
         }
         $superUsers = $this->getDI()->getConfig()->permission->superusers->toArray();
+
         return in_array($user['id'], $superUsers) ? true : false;
     }
 
@@ -25,12 +26,15 @@ class User extends Login
         }
         $storage = Login::getAuthStorage();
         $authRoles = $storage->get(Login::AUTH_KEY_ROLES);
+        $authRoles = is_object($authRoles) ? (array)$authRoles : $authRoles;
         $authRoles = is_array($authRoles) ? $authRoles : array();
         //Add default roles
         if ($user['status'] == 'active') {
             $authRoles[] = 'USER';
             $authRoles = array_unique($authRoles);
         }
+
         return $authRoles;
     }
 }
+
